@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html>
-
+    <head>
+        <title>Quizz App with Flask</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
 
 <!-- Will display the question choosen again, as well as the 4 answering options
  -->
 
-<h1>Great question...</h1>
+<h1>All right! Here are some questions about <i>{{Category}}</i>!</h1>
 
+{% for line in questions %}
+
+<div class="question-answers">
 <!-- Will display the question -->
-{{ question.Question }}
+	<h3>{{ line.Question }}</h3>
 
 <!-- Display POssible answers -->
 <!-- FUTURE UPDATE : show the answers in a random order --> 
 	<ul>
-		<li>{{question.RightAnswer}}</li>
-		<li>{{question.Answer2}}</li>
-		<li>{{question.Answer3}}</li>
-		<li>{{question.Answer4}}</li>
+		<li>{{line.RightAnswer}}</li>
+		<li>{{line.Answer2}}</li>
+		<li>{{line.Answer3}}</li>
+		<li>{{line.Answer4}}</li>
 	</ul>
 	</p>
+</div>
 		
 		
-
+{% endfor %}
 
 </html>

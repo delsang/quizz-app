@@ -33,22 +33,41 @@ with open('./standardised test.csv', mode='r') as file:
 # invoke the Flask clas
 app = Flask(__name__) 
 
-
+# Home Page
 @app.route("/")
-def index():
-    return render_template('index.html', csv_file=test)
+def home():
+    return render_template('homepage.html')
 
-
-# Will display the route depending on the question ID
-@app.route("/letsanswer/<question_id>", methods=["GET"])
-def show_question(question_id):
+# Page where the user can choose the category they want to answer
+@app.route("/categories", methods=["GET"])
+def categories():
+    # Create a list with the unique categories on the database
+    unique_categories = []
     for row in test:
-        if int(row["ID"]) == int(question_id):
-            question = row
-            return render_template("letsanswers.html", question=question)
+        category = row["Category"] 
+        if category not in unique_categories:
+            unique_categories.append(category)
+        else:
+            pass    
+        
+    return render_template('categories.html', Categories=unique_categories)
 
 
 
+# # Not ready yet
+# @app.route("/addquestion", methods=["POST"])
+# def newquestion():
+#     return render_template('newquestion.html')
+
+# Will display the route depending on the Category choosen
+@app.route("/letsanswer/<category>", methods=["GET"])
+def show_question(category):
+    category_questions = []
+    for row in test:
+        if row["Category"] == category:
+            category_questions.append(row)
+        
+    return render_template("letsanswers.html", questions=category_questions, Category=category)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Quizz App with Flask</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
+
+<h1> Which category do you want to be quizzed on? </h1>
+
+<div class="categories-display">
+{% for category in Categories %}
+<p>
+    <li><a href="/letsanswer/{{category}}"> {{category}} </a></li>
+    
+</p>   
+{% endfor %}
+</div>
+		
+		
+
+
+
+</html>
