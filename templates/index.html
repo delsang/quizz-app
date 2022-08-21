@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<h1>Welcome to our test app !</h1>
+
+<h3> Here are our questions... Which would you like to answer? </h3>
+
+	{% for line in csv_file %}
+	<p>
+		<i><a href="/letsanswer/{{line.ID}}"> {{line.Question}} </a></i> 
+		
+    </p>
+	</p>
+		
+		
+	{% endfor %}
+
+
+</html>
