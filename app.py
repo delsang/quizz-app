@@ -4,13 +4,13 @@
 # Complete the show route that displays the details of each item in the .csv
 # Include a create route that allows users to add new data to the file. This should accept a POST request with the new data.
 
-from flask import Flask, render_template, request # import what we need to use from the flask library
+from flask import Flask, render_template, request, redirect, url_for # import what we need to use from the flask library
 import csv
  
 test = []
 
 # Open the CSV file to retreive all informations as a dictionnary
-with open('./standardised test.csv', mode='r') as file:
+with open('./QuizzQuestionsanswers.csv', mode='r') as file:
 
     #open the file
     reader = csv.reader(file)
@@ -26,7 +26,7 @@ with open('./standardised test.csv', mode='r') as file:
         category = row[5]
         question_id = row[6]
         test.append({'Question':question, "RightAnswer":right, "Answer2":answ2, "Answer3":answ3, "Answer4":answ, "Category":category, "ID":question_id})
-
+        
 
 
 # Now to the website..
@@ -53,11 +53,48 @@ def categories():
     return render_template('categories.html', Categories=unique_categories)
 
 
-
-# # Not ready yet
+# The user will be able to add new questions and answers to that page.
 # @app.route("/addquestion", methods=["POST"])
-# def newquestion():
-#     return render_template('newquestion.html')
+# def create_question():
+#     new_review = {}
+#     new_question["Question"] = request.form["Question"]
+#     new_question["RightAnswer"] = request.form["RightAnswer"]
+#     new_question["Answer2"] = request.form["Answer2"]
+#     new_question["Answer3"] = request.form["Answer3"]
+#     new_question["Answer4"] = request.form["Answer4"]
+#     new_question["Category"] = request.form["Category"]
+#     new_question["ID"] = str(len(test)+1)
+#     test.append(new_question)
+#     return {
+#         "status":201,
+#         "data": test
+#     }
+
+
+@app.route("/addquestion", methods=['GET'])
+def newquestion():
+    return render_template('newquestion.html')
+
+@app.route('/addquestion',methods = ['POST'])
+def newquestions():
+    new_question = {}
+    new_question["Question"] = request.form["qt"]
+    new_question["RightAnswer"] = request.form["ra"]
+    new_question["Answer2"] = request.form["wr1"]
+    new_question["Answer3"] = request.form["wr2"]
+    new_question["Answer4"] = request.form["wr3"]
+    new_question["Category"] = request.form["cat"]
+    new_question["ID"] = str(len(test)+1)
+    test.append(new_question)
+    
+    with open('./QuizzQuestionsanswers.csv', mode='a') as f:
+        new_row = "\n" + new_question["Question"] + "," + new_question["RightAnswer"] + "," + new_question["Answer2"] + "," + new_question["Answer3"] + "," + new_question["Answer4"] + "," + new_question["Category"] + "," + new_question["ID"]
+        f.write(new_row)
+    return redirect(url_for('home'))
+
+
+
+
 
 # Will display the route depending on the Category choosen
 @app.route("/letsanswer/<category>", methods=["GET"])
