@@ -52,25 +52,7 @@ def categories():
         
     return render_template('categories.html', Categories=unique_categories)
 
-
 # The user will be able to add new questions and answers to that page.
-# @app.route("/addquestion", methods=["POST"])
-# def create_question():
-#     new_review = {}
-#     new_question["Question"] = request.form["Question"]
-#     new_question["RightAnswer"] = request.form["RightAnswer"]
-#     new_question["Answer2"] = request.form["Answer2"]
-#     new_question["Answer3"] = request.form["Answer3"]
-#     new_question["Answer4"] = request.form["Answer4"]
-#     new_question["Category"] = request.form["Category"]
-#     new_question["ID"] = str(len(test)+1)
-#     test.append(new_question)
-#     return {
-#         "status":201,
-#         "data": test
-#     }
-
-
 @app.route("/addquestion", methods=['GET'])
 def newquestion():
     return render_template('newquestion.html')
@@ -93,18 +75,38 @@ def newquestions():
     return redirect(url_for('home'))
 
 
-
-
-
-# Will display the route depending on the Category choosen
+# Will display the page rendering the choosen categories questions
 @app.route("/letsanswer/<category>", methods=["GET"])
 def show_question(category):
     category_questions = []
     for row in test:
         if row["Category"] == category:
-            category_questions.append(row)
-        
-    return render_template("letsanswers.html", questions=category_questions, Category=category)
+            category_questions.append(row)    
+    return render_template("letsanswers.html", questions=category_questions, Category=category), category_questions
+
+
+
+# Will handle the answers done and calculate the score
+@app.route("/letsanswer/<category>", methods=["POST"])
+def calculate_score(category_questions):
+    score = 0
+    if request.form.get('1') == 'yo':
+        score += 1
+    if request.form.get('2') == 'yo':
+        score += 1
+    if request.form.get('3') == 'yo':
+        score += 1
+    if request.form.get('4') == 'yo':
+        score += 1
+    else:
+        pass
+
+    return redirect(url_for('score')), score
+
+@app.route("/results")
+def score():
+    return render_template('result.html', score=score)
+
 
 
 if __name__ == '__main__':
